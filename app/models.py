@@ -3,11 +3,10 @@ from django.db import models
 # Create your models here.
 class Equipo(models.Model):
     nombre=models.CharField(max_length=100)
-    ciudad=models.CharField(max_length=100)
+    pais=models.CharField(max_length=50)
+    ciudad=models.CharField(max_length=50)
     def __str__(self):
         return self.nombre
-    
-
 
 class Jugador(models.Model):
     equipo=models.ForeignKey(Equipo, on_delete=models.CASCADE)
@@ -22,12 +21,12 @@ class Jugador(models.Model):
     estado=models.BooleanField(default=True)
     def __str__(self):
         return self.nombres + " " + self.apellidos
-    
 
 class Evento(models.Model):
     nombre=models.CharField(max_length=100)
     fecha_inicio=models.DateTimeField("Fecha de Inicio")
     fecha_fin=models.DateTimeField("Fecha de Fin")
+    estado=models.BooleanField(default=True)
     def __str__(self):
         return self.nombre
 
@@ -35,12 +34,12 @@ class Juego(models.Model):
     evento=models.ForeignKey(Evento, on_delete=models.CASCADE)
     descripcion=models.CharField(max_length=100)
     fecha_partido=models.DateTimeField("Fecha del Partido")
+    estado=models.BooleanField(default=True)
     def __str__(self):
         return self.descripcion
-    
 
 class Historial(models.Model):
-    juego=models.ForeignKey(Juego, on_delete=models.CASCADE)
+    juego=models.ForeignKey(Juego,default="", on_delete=models.CASCADE)
     equipo=models.ForeignKey(Equipo, on_delete=models.CASCADE)
     puntaje=models.IntegerField()
     promedio_stat_fuerza=models.IntegerField(default=1)
@@ -48,6 +47,4 @@ class Historial(models.Model):
     promedio_stat_velocidad=models.IntegerField(default=1)
     promedio_stat_resistencia=models.IntegerField(default=1)
     def __str__(self):
-        return self.equipo
-    
-    
+        return self.equipo.nombre
